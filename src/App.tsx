@@ -1,20 +1,29 @@
 import "./App.css";
-import { Canvas } from "@react-three/fiber";
-import { OrbitControls, useTexture } from "@react-three/drei";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { OrbitControls, Sphere, useTexture } from "@react-three/drei";
 import { useGLTF } from "@react-three/drei";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import * as THREE from "three";
 
-const Modal = ({ currentColor }: { currentColor: string }) => {
-  const { scene } = useGLTF("/young_male.glb");
-  const texure = useTexture("/vite.svg");
+useGLTF.preload("/young_male.glb");
+
+const Modal = ({ scene, currentColor }: { currentColor: string }) => {
+  // const texure = useTexture("/vite.svg");
+  const ref = useRef(null);
+
+  // useFrame((state, delta) => {
+  //   ref.current.rotation.y += delta * 0.5;
+  // });
 
   useEffect(() => {
-    scene.traverse((child) => {
-      console.log(child);
-      if (child.isMesh) {
-        child.material.color.set(currentColor);
-      }
-    });
+    // scene.traverse((child) => {
+    //   if (child.isMesh) {
+    //     child.material.color.set(currentColor);
+    //   }
+    // });
+
+    const shirt = scene.getObjectById(29);
+    shirt?.material?.color?.set(currentColor);
   }, [currentColor, scene]);
 
   // useEffect(() => {
@@ -30,38 +39,72 @@ const Modal = ({ currentColor }: { currentColor: string }) => {
   //   // mesh.material.color.set(currentColor);
   // }, [scene, currentColor]);
 
-  useEffect(() => {
-    console.log(scene.children[0]?.children);
-    const mesh = scene.getObjectById(23);
-    mesh?.position.set(3, 3, 3);
-    // mesh.material.map = texure;
-    // mesh.material.needsUpdate = true;
-  }, [scene, texure]);
+  // useEffect(() => {
+  //   console.log(scene.children[0]?.children);
+  //   const mesh = scene.getObjectById(23);
+  //   mesh?.position.set(3, 3, 3);
+  //   mesh.material.map = texure;
+  //   mesh.material.needsUpdate = true;
+  // }, [scene, texure]);
 
   return (
     <>
       <ambientLight intensity={0.5} />
       <directionalLight position={[10, 10, 5]} intensity={1} />
-      <primitive object={scene} scale={1} />
-      <OrbitControls />
+      <primitive object={scene} ref={ref} />
+      {/* <mesh geometry={nodesy} material={materials.ShirtMaterial} /> */}
+
+      <OrbitControls enableRotate />
     </>
   );
 };
 function App() {
   const [currentColor, setCurrentColor] = useState("#BE9167");
 
+  const { scene } = useGLTF("/young_male.glb");
+  console.log(scene);
+
+  const onClick = () => {
+    // const targetMesh = scene.getObjectById(18); // Change 23 to your actual ID
+
+    // if (targetMesh && targetMesh.isMesh) {
+    //   targetMesh.geometry.dispose(); // optional cleanup
+    //   targetMesh.geometry = targetMesh.clone(true); // 🎲 Replace with cube
+    //   targetMesh.material.color.set("red"); // optionally update color
+    // }
+
+    const shirt = scene.getObjectById(16);
+
+    if (shirt && shirt.isMesh) {
+      const copy = shirt.clone();
+      console.log(copy.id);
+
+      // Optional: clone geometry/material if you want independence
+      copy.geometry = shirt.geometry.clone();
+      copy.material = shirt.material.clone();
+      copy.material.color.set("red");
+      // Change position so it's not on top of the original
+      copy.position.set(0, 0, 0);
+      copy.rotation.set(-Math.PI / 2, 0, 0);
+
+      // Add it to the scene or to the parent of the original
+      scene.add(copy);
+    }
+  };
+
   return (
     <div className="m-4">
       <h1 className="text-3xl font-bold  text-center mb-6">Virtual Trial</h1>
-
       <Canvas
         className="w-full !h-[60vh] bg-gray-200"
-        camera={{ fov: 75, position: [0, -5, 18] }}
+        camera={{ fov: 75, position: [0, 0, 15] }}
       >
-        <Modal currentColor={currentColor} />
+        <Modal scene={scene} currentColor={currentColor} />
       </Canvas>
 
       <div className="flex flex-col items-center justify-center mt-24">
+        <button onClick={onClick}>Add default cloth</button>
+
         <h1 className="text-center text-2xl">Update clothes color</h1>
         <div>
           <input
@@ -72,6 +115,8 @@ function App() {
           />
         </div>
       </div>
+
+      <div></div>
     </div>
   );
 }
