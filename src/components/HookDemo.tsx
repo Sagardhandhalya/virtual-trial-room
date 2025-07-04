@@ -23,6 +23,7 @@ const HookDemo = () => {
   const updatePhone = () => {
     const newStore = { ...store, phone: "122" };
     store = newStore;
+
     updateStore();
   };
 

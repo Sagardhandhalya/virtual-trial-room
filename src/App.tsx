@@ -1,13 +1,20 @@
 import "./App.css";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, Sphere, useTexture } from "@react-three/drei";
-import { useGLTF } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls, useGLTF } from "@react-three/drei";
 import { useEffect, useRef, useState } from "react";
+import PoseDetection from "./components/PoseDetection";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import * as THREE from "three";
 
 useGLTF.preload("/young_male.glb");
 
-const Modal = ({ scene, currentColor }: { currentColor: string }) => {
+const Modal = ({
+  scene,
+  currentColor,
+}: {
+  scene: THREE.Group;
+  currentColor: string;
+}) => {
   // const texure = useTexture("/vite.svg");
   const ref = useRef(null);
 
@@ -22,8 +29,14 @@ const Modal = ({ scene, currentColor }: { currentColor: string }) => {
     //   }
     // });
 
-    const shirt = scene.getObjectById(29);
-    shirt?.material?.color?.set(currentColor);
+    const shirt = scene.getObjectById(29) as THREE.Mesh | null;
+    if (
+      shirt &&
+      shirt.material &&
+      shirt.material instanceof THREE.MeshStandardMaterial
+    ) {
+      shirt.material.color.set(currentColor);
+    }
   }, [currentColor, scene]);
 
   // useEffect(() => {
@@ -75,49 +88,58 @@ function App() {
 
     const shirt = scene.getObjectById(16);
 
-    if (shirt && shirt.isMesh) {
+    if (shirt && shirt instanceof THREE.Mesh) {
       const copy = shirt.clone();
       console.log(copy.id);
-
       // Optional: clone geometry/material if you want independence
-      copy.geometry = shirt.geometry.clone();
-      copy.material = shirt.material.clone();
-      copy.material.color.set("red");
+      copy.geometry = (shirt.geometry as THREE.BufferGeometry).clone();
+      copy.material = (shirt.material as THREE.Material).clone();
+      if ((copy.material as THREE.MeshStandardMaterial).color) {
+        (copy.material as THREE.MeshStandardMaterial).color.set("red");
+      }
       // Change position so it's not on top of the original
       copy.position.set(0, 0, 0);
       copy.rotation.set(-Math.PI / 2, 0, 0);
-
       // Add it to the scene or to the parent of the original
       scene.add(copy);
     }
   };
 
   return (
-    <div className="m-4">
-      <h1 className="text-3xl font-bold  text-center mb-6">Virtual Trial</h1>
-      <Canvas
-        className="w-full !h-[60vh] bg-gray-200"
-        camera={{ fov: 75, position: [0, 0, 15] }}
-      >
-        <Modal scene={scene} currentColor={currentColor} />
-      </Canvas>
-
-      <div className="flex flex-col items-center justify-center mt-24">
-        <button onClick={onClick}>Add default cloth</button>
-
-        <h1 className="text-center text-2xl">Update clothes color</h1>
-        <div>
-          <input
-            value={currentColor}
-            onChange={(e) => setCurrentColor(e.target.value)}
-            type="color"
-            placeholder="Enter your name"
-          />
-        </div>
-      </div>
-
-      <div></div>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <div className="m-4">
+              <h1 className="text-3xl font-bold  text-center mb-6">
+                Virtual Trial
+              </h1>
+              <Canvas
+                className="w-full !h-[60vh] bg-gray-200"
+                camera={{ fov: 75, position: [0, 0, 15] }}
+              >
+                <Modal scene={scene} currentColor={currentColor} />
+              </Canvas>
+              <div className="flex flex-col items-center justify-center mt-24">
+                <button onClick={onClick}>Add default cloth</button>
+                <h1 className="text-center text-2xl">Update clothes color</h1>
+                <div>
+                  <input
+                    value={currentColor}
+                    onChange={(e) => setCurrentColor(e.target.value)}
+                    type="color"
+                    placeholder="Enter your name"
+                  />
+                </div>
+              </div>
+              <div></div>
+            </div>
+          }
+        />
+        <Route path="/2d" element={<PoseDetection />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
