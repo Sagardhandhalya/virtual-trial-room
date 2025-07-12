@@ -1,0 +1,61 @@
+.trial-room-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.upload-area {
+  border: 2px dashed #cbd5e0;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.upload-area:hover {
+  border-color: #3b82f6;
+  background-color: #f8fafc;
+}
+
+.upload-area.dragover {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+}
+
+.clothing-item {
+  transition: all 0.2s ease;
+}
+
+.clothing-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.clothing-item.selected {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+}
+
+.model-viewer {
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.instructions {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+}
+
+.instructions h3 {
+  color: #1e40af;
+  margin-bottom: 0.5rem;
+}
+
+.instructions ol {
+  color: #1e3a8a;
+}
+
+.instructions li {
+  margin-bottom: 0.25rem;
+}

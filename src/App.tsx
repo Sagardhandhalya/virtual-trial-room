@@ -3,6 +3,8 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
 import { useEffect, useRef, useState } from "react";
 import PoseDetection from "./components/PoseDetection";
+import TrialRoom from "./components/TrialRoom";
+import Navigation from "./components/Navigation";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import * as THREE from "three";
 
@@ -107,6 +109,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <Navigation />
       <Routes>
         <Route
           path="/"
@@ -138,6 +141,7 @@ function App() {
           }
         />
         <Route path="/2d" element={<PoseDetection />} />
+        <Route path="/trial-room" element={<TrialRoom />} />
       </Routes>
     </BrowserRouter>
   );
