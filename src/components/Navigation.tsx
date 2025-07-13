@@ -1,12 +1,13 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from "react-router-dom";
 
 const Navigation = () => {
   const location = useLocation();
 
   const navItems = [
-    { path: '/', label: 'Home' },
-    { path: '/trial-room', label: 'Trial Room' },
-    { path: '/2d', label: '2D Pose Detection' },
+    { path: "/", label: "Home" },
+    { path: "/trial-room", label: "Trial Room" },
+    { path: "/2d", label: "2D Pose Detection" },
+    { path: "/manipulate", label: "Manipulate Model" },
   ];
 
   return (
@@ -23,8 +24,8 @@ const Navigation = () => {
                 to={item.path}
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                   location.pathname === item.path
-                    ? 'bg-blue-500 text-white'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                    ? "bg-blue-500 text-white"
+                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                 }`}
               >
                 {item.label}
