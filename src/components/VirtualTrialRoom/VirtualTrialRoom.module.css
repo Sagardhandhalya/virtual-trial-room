@@ -1,0 +1,109 @@
+.lightTheme {
+    background: #f7f7f7;
+}
+
+.trialRoomFlex {
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+    height: 100vh;
+    background: #f7f7f7;
+}
+
+.trialRoomSidebar {
+    width: 28vw;
+    min-width: 180px;
+    max-width: 340px;
+    background: #fff;
+    color: #222;
+    padding: 32px 18px 18px 18px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    z-index: 2;
+    box-shadow: 2px 0 16px #0001;
+}
+
+.trialRoomSection {
+    margin-bottom: 32px;
+}
+
+.trialRoomThumbnails {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-bottom: 18px;
+}
+
+.trialRoomThumb {
+    width: 110px;
+    height: 110px;
+    object-fit: contain;
+    border: 2px solid transparent;
+    border-radius: 16px;
+    background: #f7f7f7;
+    cursor: pointer;
+    transition: border 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px #0001;
+    padding: 8px;
+}
+
+.trialRoomThumb.selected {
+    border: 2px solid #1976d2;
+    box-shadow: 0 4px 16px #1976d233;
+}
+
+.trialRoomCanvasWrap {
+    flex: 1 1 72vw;
+    width: 72vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: #f7f7f7;
+}
+
+.trialRoomCanvas {
+    min-width: 100%;
+    min-height: 100vh;
+    border-radius: 18px;
+    box-shadow: 0 2px 24px #0002;
+    background: #fff;
+}
+
+@media (max-width: 900px) {
+    .trialRoomFlex {
+        flex-direction: column;
+    }
+
+    .trialRoomSidebar {
+        width: 100vw;
+        min-width: 0;
+        max-width: 100vw;
+        flex-direction: row;
+        align-items: flex-start;
+        padding: 10px 4px 4px 4px;
+        overflow-x: auto;
+        background: #fff;
+        box-shadow: none;
+    }
+
+    .trialRoomSection {
+        margin-bottom: 0;
+        margin-right: 24px;
+    }
+
+    .trialRoomThumbnails {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        margin-bottom: 0;
+    }
+
+    .trialRoomCanvasWrap {
+        width: 100vw;
+        min-height: 60vh;
+        padding: 0;
+    }
+}
